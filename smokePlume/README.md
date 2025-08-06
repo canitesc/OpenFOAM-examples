@@ -8,6 +8,8 @@ The computational setup employs OpenFOAM's `buoyantPimpleFoam` solver, which is 
 
 ## Simulation Result
 
+Results obtained with ESI-OpenCFD / OpenFOAM.com v2506.
+
 ![Smoke Plume Simulation](https://github.com/canitesc/OpenFOAM-examples/raw/main/smokePlume/smoke.gif)
 
 ## Physical Problem Description
