@@ -1,0 +1,100 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  v2506
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   1;
+
+vertices
+(
+    // Bottom vertices
+    (0 0 0)        // 0
+    (0.4 0 0)      // 1 - left side of inlet
+    (0.6 0 0)      // 2 - right side of inlet  
+    (1 0 0)        // 3
+    // Top vertices
+    (0 2 0)        // 4
+    (0.4 2 0)      // 5
+    (0.6 2 0)      // 6
+    (1 2 0)        // 7
+    // Bottom vertices (back)
+    (0 0 0.1)      // 8
+    (0.4 0 0.1)    // 9 - left side of inlet
+    (0.6 0 0.1)    // 10 - right side of inlet
+    (1 0 0.1)      // 11
+    // Top vertices (back)
+    (0 2 0.1)      // 12
+    (0.4 2 0.1)    // 13
+    (0.6 2 0.1)    // 14
+    (1 2 0.1)      // 15
+);
+
+blocks
+(
+    hex (0 1 5 4 8 9 13 12) (40 160 1) simpleGrading (1 1 1)    // Left block
+    hex (1 2 6 5 9 10 14 13) (20 160 1) simpleGrading (1 1 1)    // Center block (high resolution)
+    hex (2 3 7 6 10 11 15 14) (40 160 1) simpleGrading (1 1 1)  // Right block
+);
+
+edges
+(
+);
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (1 2 10 9)  // Small inlet in the center bottom
+        );
+    }
+    
+    walls
+    {
+        type wall;
+        faces
+        (
+            // Bottom walls (excluding inlet)
+            (0 1 9 8)      // Bottom left wall
+            (2 3 11 10)    // Bottom right wall
+            // Top wall
+            (4 5 13 12)    // Top left
+            (5 6 14 13)    // Top center
+            (6 7 15 14)    // Top right
+            // Side walls
+            (0 8 12 4)     // Left wall
+            (3 7 15 11)    // Right wall
+        );
+    }
+    
+    frontAndBack
+    {
+        type empty;
+        faces
+        (
+            // Front faces
+            (0 1 5 4)      // Front left
+            (1 2 6 5)      // Front center
+            (2 3 7 6)      // Front right
+            // Back faces
+            (8 9 13 12)    // Back left
+            (9 10 14 13)   // Back center
+            (10 11 15 14)  // Back right
+        );
+    }
+);
+
+// ************************************************************************* //
