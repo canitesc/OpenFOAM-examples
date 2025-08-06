@@ -4,7 +4,7 @@
 
 This OpenFOAM case simulates a buoyant smoke plume rising from a hot inlet positioned at the bottom of an enclosed rectangular domain. The simulation demonstrates fundamental buoyancy-driven flow phenomena that occur when hot gases rise through cooler ambient air, similar to the behavior observed in smoke rising from a fire, hot gas emissions from industrial stacks, or natural convection patterns in enclosed spaces. 
 
-The computational setup employs OpenFOAM's `buoyantPimpleFoam` solver, which is specifically designed to handle compressible flow problems where buoyancy effects play a significant role in the fluid dynamics. This solver couples the momentum, energy, and continuity equations to accurately model the complex interaction between temperature gradients, density variations, gravity forces, and the resulting fluid motion. The smoke plume simulation implemented in the `smokePlume` directory draws inspiration from the [PhiFlow smoke plume example](https://tum-pbs.github.io/PhiFlow/examples/grids/Smoke_Plume.html), but has been fully reimplemented using OpenFOAM's advanced numerical framework and the buoyantPimpleFoam solver to leverage OpenFOAM's robust handling of compressible buoyant flows.
+The computational setup employs OpenFOAM's `buoyantPimpleFoam` solver, which is specifically designed to handle compressible flow problems where buoyancy effects play a significant role in the fluid dynamics. This solver couples the momentum, energy, and continuity equations to model the interaction between temperature, gravity, and the resulting fluid motion. The smoke plume simulation is similar to the [PhiFlow smoke plume example](https://tum-pbs.github.io/PhiFlow/examples/grids/Smoke_Plume.html).
 
 ## Simulation Result
 
@@ -14,9 +14,9 @@ The computational setup employs OpenFOAM's `buoyantPimpleFoam` solver, which is 
 
 ### Domain Geometry
 
-The computational domain consists of a rectangular channel with dimensions of 1 meter in width, 2 meters in height, and 0.1 meters in depth, creating an effectively quasi-two-dimensional simulation environment. At the bottom boundary of this domain, a small inlet opening spans 0.2 meters in width, precisely centered between x-coordinates of 0.4m and 0.6m, through which the hot gas is injected into the domain. 
+The computational domain consists of a rectangular channel with dimensions of 1 meter in width, 2 meters in height, and 0.1 meters in depth, creating an effectively quasi-two-dimensional simulation environment. At the bottom boundary of this domain, a small inlet opening spans 0.2 meters in width, centered between x-coordinates of 0.4m and 0.6m, through which the hot gas is injected into the domain. 
 
-The domain is completely enclosed with solid wall boundaries on all sides except for the inlet opening, meaning there is no designated outlet for the flow to escape. This enclosed configuration forces the injected hot gas to recirculate within the domain, creating complex flow patterns as the buoyant plume interacts with the ceiling and walls. The computational mesh employed for spatial discretization consists of a structured hexahedral grid with 100 cells in the horizontal direction and 160 cells in the vertical direction, resulting in a total of 16,000 computational cells that provide sufficient resolution to capture the essential flow features while maintaining reasonable computational costs.
+The domain is enclosed with solid wall boundaries on all sides except for the inlet opening, meaning there is no designated outlet for the flow to escape. This enclosed configuration forces the injected hot gas to recirculate within the domain, creating complex flow patterns as the buoyant plume interacts with the ceiling and walls. The computational mesh employed for spatial discretization consists of a structured hexahedral grid with 100 cells in the horizontal direction and 160 cells in the vertical direction, resulting in a total of 16,000 computational cells.
 
 ### Physics Modeled
 
@@ -25,16 +25,6 @@ The simulation captures several fundamental physical phenomena that govern buoya
 Natural convection arises as the fundamental transport mechanism, where the temperature-induced density differences generate buoyancy forces that drive the upward motion of the heated fluid. The lighter hot gas experiences an upward buoyancy force when surrounded by denser cool air, causing it to rise through the domain in a characteristic plume structure. The simulation treats the flow as laminar, without turbulence modeling, which allows for cleaner visualization of the fundamental flow structures and reduces numerical diffusion that might otherwise obscure the plume dynamics.
 
 The solver accounts for compressibility effects through the perfect gas equation of state, which relates pressure, density, and temperature according to the relationship ρ = p/(RT), where R is the specific gas constant for air. This approach allows the simulation to accurately capture the density variations that drive the buoyant motion. Gravity acts uniformly throughout the domain with a magnitude of 9.81 m/s² in the negative y-direction, providing the body force that, combined with density variations, generates the buoyancy effects central to this flow problem.
-
-### Key Phenomena Observed
-
-The simulation reveals several characteristic features of buoyancy-driven flows in enclosed domains. The most prominent feature is the formation and rise of the buoyant plume, which develops as the hot gas injected at the inlet accelerates upward due to the buoyancy forces arising from temperature-induced density differences. The plume maintains a relatively coherent structure as it rises through the cooler ambient fluid, entraining surrounding air and gradually expanding in width.
-
-When the rising plume impinges on the upper boundary of the domain, it undergoes a dramatic transformation, forming a characteristic mushroom cloud pattern. This occurs because the vertical momentum of the plume is redirected horizontally upon collision with the ceiling, causing the hot gas to spread laterally in both directions. The interaction creates a distinctive cap-like structure reminiscent of the mushroom clouds observed in atmospheric phenomena or explosive events.
-
-As the simulation progresses, the hot gas accumulates near the ceiling and begins to spread laterally throughout the upper portion of the domain. This lateral spreading, combined with the continuous injection of hot gas from below, establishes complex recirculation patterns within the enclosed space. Cool air descends along the side walls to replace the rising hot air, creating large-scale circulation cells that transport heat throughout the domain.
-
-The rising plume also exhibits Rayleigh-Bénard type instabilities, which manifest as oscillations and asymmetries in the plume structure. These instabilities arise from the competition between the stabilizing effect of viscosity and the destabilizing effect of buoyancy, and their presence adds realistic complexity to the flow field. The exact nature and onset of these instabilities depend on the governing dimensionless parameters, particularly the Rayleigh number, which characterizes the relative importance of buoyancy and viscous forces in the system.
 
 ## File Structure
 
@@ -164,67 +154,6 @@ paraFoam
 - **Velocity Magnitude**: `|U|` - Speed regardless of direction
 - **Vorticity**: `curl(U)` - Shows rotational flow structures
 - **Density**: Can be calculated from temperature using ideal gas law
-
-### Advanced Visualization Techniques
-
-#### 1. Velocity Vectors
-- Filters → Common → Glyph
-- Vectors: U
-- Glyph Type: Arrow
-- Scale Mode: vector
-
-#### 2. Streamlines
-- Filters → Common → Stream Tracer
-- Vectors: U
-- Seed Type: Line or Point Cloud
-- Shows flow pathlines
-
-#### 3. Contour Lines (Isotherms)
-- Filters → Common → Contour
-- Contour By: T
-- Add values: 300, 310, 320, 330, 340, 350, 360K
-- Shows temperature stratification
-
-#### 4. Volume Rendering
-- Change representation to "Volume"
-- Adjust opacity transfer function
-- Good for 3D visualization of temperature field
-
-#### 5. Animation Export
-- File → Save Animation
-- Choose format (AVI, PNG sequence)
-- Set frame rate and resolution
-
-### Color Maps
-Recommended color maps for temperature:
-- **Cool to Warm**: Blue (cold) to Red (hot)
-- **Black-Body Radiation**: Physically realistic
-- **Rainbow**: High contrast but less perceptually uniform
-
-## Troubleshooting
-
-### Common Issues and Solutions
-
-1. **Plume drifts to one side**
-   - Natural due to Rayleigh-Bénard instability
-   - Check pressure reference cell location in `system/fvSolution`
-   - Ensure mesh is symmetric
-
-2. **Too much numerical diffusion**
-   - Switch to central differencing schemes
-   - Increase mesh resolution
-   - Reduce time step (lower maxCo)
-
-3. **Simulation crashes**
-   - Reduce inlet velocity
-   - Reduce time step
-   - Check mesh quality with `checkMesh`
-   - Use more stable numerical schemes
-
-4. **Plume too turbulent/chaotic**
-   - Switch from RAS to laminar
-   - Reduce inlet velocity
-   - Increase mesh resolution
 
 ## Physics Background
 
