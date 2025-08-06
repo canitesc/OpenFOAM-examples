@@ -8,7 +8,7 @@ The computational setup employs OpenFOAM's `buoyantPimpleFoam` solver, which is 
 
 ## Simulation Result
 
-![Smoke Plume Simulation](smokePlume/smoke.gif)
+![Smoke Plume Simulation](https://github.com/canitesc/OpenFOAM-examples/raw/main/smokePlume/smoke.gif)
 
 ## Physical Problem Description
 
