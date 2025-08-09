@@ -173,7 +173,7 @@ where $\rho$ is the fluid density, $t$ is time, and $\mathbf{u}$ is the velocity
 #### Momentum Equation
 The momentum equation incorporates both pressure gradients and buoyancy forces:
 
-$$\frac{\partial (\rho \mathbf{u})}{\partial t} + \nabla \cdot (\rho \mathbf{u} \mathbf{u}) = -\nabla p + \nabla \cdot \boldsymbol{\tau} + \rho \mathbf{g}$$
+$$\frac{\partial (\rho \mathbf{u})}{\partial t} + \rho(\mathbf{u} \cdot \nabla) \mathbf{u}) = -\nabla p + \nabla \cdot \boldsymbol{\mu} + \rho \mathbf{g}$$
 
 where $p$ is pressure, $\boldsymbol{\tau}$ is the viscous stress tensor given by $\boldsymbol{\tau} = \mu[\nabla \mathbf{u} + (\nabla \mathbf{u})^T - \frac{2}{3}(\nabla \cdot \mathbf{u})\mathbf{I}]$, $\mu$ is the dynamic viscosity, and $\mathbf{g}$ is the gravitational acceleration vector.
 
